@@ -42,15 +42,24 @@ public class EmpruntPanel extends JPanel {
         add(searchPanel, BorderLayout.NORTH);
 
         // Table for borrowings
-        tableModel = new DefaultTableModel(
-                new String[]{"ID", "Livre ID", "Utilisateur ID", "Date Emprunt", "Date Retour Prévue", "Date Retour Effective"}, 0) {
+        tableModel = new DefaultTableModel(new String[]{"ID", "Livre ID", "Utilisateur ID", "Date Emprunt", "Date Retour Prévue", "Date Retour Effective"}, 0) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                // Ensure dates are handled as LocalDate for proper sorting
-                if (columnIndex >= 3 && columnIndex <= 5) return LocalDate.class;
-                return Object.class;
+                switch (columnIndex) {
+                    case 0: // ID column
+                    case 1: // Livre ID column
+                    case 2: // Utilisateur ID column
+                        return Integer.class; // Treat as integers
+                    case 3: // Date Emprunt column
+                    case 4: // Date Retour Prévue column
+                    case 5: // Date Retour Effective column
+                        return LocalDate.class; // Treat as dates
+                    default:
+                        return String.class; // Default to string
+                }
             }
         };
+
         tableEmprunts = new JTable(tableModel);
 
         // Enable sorting by setting a RowSorter
