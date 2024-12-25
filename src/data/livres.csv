@@ -1,6 +1,6 @@
 id,isbn,titre,auteur,anneePublication,genre,quantite
 1,9781234567890,Java Programming,James Gosling,2005,Programming,6
-2,9789876543210,Effective Java,Joshua Bloch,2008,Programming,4
+2,9789876543210,Effective Java,Joshua Bloch,2008,Programming,5
 3,9781111111111,Head First Java,Kathy Sierra,2010,Programming,4
 4,9782222222222,Python Crash Course,Eric Matthes,2016,Programming,9
 5,9783333333333,The Pragmatic Programmer,Andrew Hunt,1999,Programming,4

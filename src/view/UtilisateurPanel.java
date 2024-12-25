@@ -57,15 +57,42 @@ public class UtilisateurPanel extends JPanel {
     }
 
     private void ajouterUtilisateur() {
+        String nom = txtNom.getText().trim();
+        String email = txtEmail.getText().trim();
+
+        // Validation conditions
+        if (nom.isEmpty() || email.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tous les champs doivent être remplis.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!email.matches("^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            JOptionPane.showMessageDialog(this, "Adresse e-mail invalide. Veuillez entrer une adresse e-mail valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Ensure the email is unique
+        List<Utilisateur> utilisateurs = utilisateurController.listerUtilisateurs();
+        for (Utilisateur u : utilisateurs) {
+            if (u.getEmail().equalsIgnoreCase(email)) {
+                JOptionPane.showMessageDialog(this, "Cet e-mail est déjà utilisé. Veuillez en utiliser un autre.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // Create and add the user if all conditions are met
         Utilisateur utilisateur = new Utilisateur(
-                utilisateurController.listerUtilisateurs().size() + 1, // Generate ID
-                txtNom.getText(),
-                txtEmail.getText()
+                utilisateurs.size() + 1, // Generate ID
+                nom,
+                email
         );
+
         utilisateurController.ajouterUtilisateur(utilisateur);
+        JOptionPane.showMessageDialog(this, "Utilisateur ajouté avec succès.");
         loadUtilisateurs();
         clearInputFields();
     }
+
 
     private void supprimerUtilisateur() {
         int selectedRow = tableUtilisateurs.getSelectedRow();
