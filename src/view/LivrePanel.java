@@ -61,7 +61,7 @@ public class LivrePanel extends JPanel {
 
         // Input fields
         JPanel inputPanel = new JPanel(new GridLayout(6, 2, 10, 10));
-        inputPanel.setPreferredSize(new Dimension(400, 300)); // Increase size of the input fields
+        inputPanel.setPreferredSize(new Dimension(250, 100)); // Increase size of the input fields
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         inputPanel.add(new JLabel("ISBN:"));
         txtISBN = new JTextField(25); // Set larger text fields
