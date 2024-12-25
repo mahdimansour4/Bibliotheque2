@@ -154,15 +154,30 @@ public class LivrePanel extends JPanel {
     }
 
     private void rechercherLivre() {
-        String query = txtSearch.getText();
-        List<Livre> livres = livreController.rechercherLivres(query);
-        tableModel.setRowCount(0);
+        String query = txtSearch.getText().trim();
+        tableModel.setRowCount(0); // Clear the table first
+
+        List<Livre> livres;
+        if (query.isEmpty()) {
+            // Load all books if the search field is empty
+            livres = livreController.listerLivres();
+        } else {
+            // Search for books based on the query
+            livres = livreController.rechercherLivres(query);
+        }
+
         for (Livre livre : livres) {
             tableModel.addRow(new Object[]{
-                    livre.getId(), livre.getIsbn(), livre.getTitre(), livre.getAuteur(), livre.getGenre(), livre.getQuantite()
+                    livre.getId(),
+                    livre.getIsbn(),
+                    livre.getTitre(),
+                    livre.getAuteur(),
+                    livre.getGenre(),
+                    livre.getQuantite()
             });
         }
     }
+
 
     public void loadLivres() {
         tableModel.setRowCount(0); // Clear the table

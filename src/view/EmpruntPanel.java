@@ -37,7 +37,7 @@ public class EmpruntPanel extends JPanel {
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         txtSearch = new JTextField(20);
         txtSearch.getDocument().addDocumentListener(new DocumentListenerAdapter(() -> loadFilteredEmprunts(txtSearch.getText())));
-        searchPanel.add(new JLabel("Rechercher (Livre ID, Utilisateur ID ou Date):"));
+        searchPanel.add(new JLabel("Rechercher (Livre ID, Utilisateur ID):"));
         searchPanel.add(txtSearch);
         add(searchPanel, BorderLayout.NORTH);
 
@@ -94,28 +94,31 @@ public class EmpruntPanel extends JPanel {
     }
 
     public void loadFilteredEmprunts(String query) {
-        tableModel.setRowCount(0); // Clear table
-        List<Emprunt> emprunts = empruntController.listerEmprunts();
+        tableModel.setRowCount(0); // Clear the table to avoid duplication
 
+        List<Emprunt> emprunts;
+        if (query.isEmpty()) {
+            // If search query is empty, load all emprunts
+            emprunts = empruntController.listerEmprunts();
+        } else {
+            // Filter emprunts based on the search query
+            emprunts = empruntController.listerEmprunts().stream()
+                    .filter(emprunt -> String.valueOf(emprunt.getLivreId()).contains(query) ||
+                            String.valueOf(emprunt.getUtilisateurId()).contains(query))
+                    .toList();
+        }
+
+        // Populate the table with the filtered or complete list of emprunts
         for (Emprunt emprunt : emprunts) {
-            // Match against Livre ID, Utilisateur ID, or any date
-            boolean matches = query.isEmpty() ||
-                    String.valueOf(emprunt.getLivreId()).contains(query) ||
-                    String.valueOf(emprunt.getUtilisateurId()).contains(query) ||
-                    emprunt.getDateEmprunt().toString().contains(query) ||
-                    emprunt.getDateRetourPrevue().toString().contains(query) ||
-                    (emprunt.getDateRetourEffective() != null && emprunt.getDateRetourEffective().toString().contains(query));
-
-            if (matches) {
-                tableModel.addRow(new Object[]{
-                        emprunt.getId(),
-                        emprunt.getLivreId(),
-                        emprunt.getUtilisateurId(),
-                        emprunt.getDateEmprunt(),
-                        emprunt.getDateRetourPrevue(),
-                        emprunt.getDateRetourEffective() == null ? "Non retourné" : emprunt.getDateRetourEffective()
-                });
-            }
+            tableModel.addRow(new Object[]{
+                    emprunt.getId(),
+                    emprunt.getLivreId(),
+                    emprunt.getUtilisateurId(),
+                    emprunt.getDateEmprunt(),
+                    emprunt.getDateRetourPrevue(),
+                    emprunt.getDateRetourEffective() == null ? "Non retourné" : emprunt.getDateRetourEffective()
+            });
         }
     }
+
 }

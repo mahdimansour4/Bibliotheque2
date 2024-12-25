@@ -20,7 +20,7 @@ public class LoginForm extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(70, 130, 180)); // Steel blue
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        JLabel lblHeader = new JLabel("Bienvenue au Système de Gestion de Bibliothèque", SwingConstants.CENTER);
+        JLabel lblHeader = new JLabel("Système de Gestion de Bibliothèque", SwingConstants.CENTER);
         lblHeader.setFont(new Font("Arial", Font.BOLD, 18));
         lblHeader.setForeground(Color.WHITE);
         headerPanel.add(lblHeader, BorderLayout.CENTER);
