@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Bibliotheque2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Bibliotheque2_jar</output-path>
+    <root id="archive" name="Bibliotheque2.jar">
+      <element id="module-output" name="Bibliotheque2" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/ressources/jcommon-1.0.23.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/ressources/jfreechart-1.0.19.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$" />
+    </root>
+  </artifact>
+</component>
