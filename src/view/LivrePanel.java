@@ -43,6 +43,17 @@ public class LivrePanel extends JPanel {
         rowSorter = new TableRowSorter<>(tableModel);
         tableLivres.setRowSorter(rowSorter);
 
+        tableLivres.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tableLivres.getSelectedRow() != -1) {
+                int selectedRow = tableLivres.getSelectedRow();
+                txtISBN.setText(tableModel.getValueAt(selectedRow, 1).toString());
+                txtTitre.setText(tableModel.getValueAt(selectedRow, 2).toString());
+                txtAuteur.setText(tableModel.getValueAt(selectedRow, 3).toString());
+                txtGenre.setText(tableModel.getValueAt(selectedRow, 4).toString());
+                txtQuantite.setText(tableModel.getValueAt(selectedRow, 5).toString());
+            }
+        });
+
         add(new JScrollPane(tableLivres), BorderLayout.CENTER);
 
         // Input fields
