@@ -29,7 +29,9 @@ public class LivrePanel extends JPanel {
         searchPanel.add(txtSearch);
         add(searchPanel, BorderLayout.NORTH);
 
-        // Table
+        // Table Panel
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setPreferredSize(new Dimension(700, 300)); // Set smaller size for the table panel
         tableModel = new DefaultTableModel(new String[]{"ID", "ISBN", "Titre", "Auteur", "Genre", "Quantité"}, 0) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -54,25 +56,27 @@ public class LivrePanel extends JPanel {
             }
         });
 
-        add(new JScrollPane(tableLivres), BorderLayout.CENTER);
+        tablePanel.add(new JScrollPane(tableLivres), BorderLayout.CENTER);
+        add(tablePanel, BorderLayout.CENTER);
 
         // Input fields
         JPanel inputPanel = new JPanel(new GridLayout(6, 2, 10, 10));
+        inputPanel.setPreferredSize(new Dimension(400, 300)); // Increase size of the input fields
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         inputPanel.add(new JLabel("ISBN:"));
-        txtISBN = new JTextField();
+        txtISBN = new JTextField(25); // Set larger text fields
         inputPanel.add(txtISBN);
         inputPanel.add(new JLabel("Titre:"));
-        txtTitre = new JTextField();
+        txtTitre = new JTextField(25);
         inputPanel.add(txtTitre);
         inputPanel.add(new JLabel("Auteur:"));
-        txtAuteur = new JTextField();
+        txtAuteur = new JTextField(25);
         inputPanel.add(txtAuteur);
         inputPanel.add(new JLabel("Genre:"));
-        txtGenre = new JTextField();
+        txtGenre = new JTextField(25);
         inputPanel.add(txtGenre);
         inputPanel.add(new JLabel("Quantité:"));
-        txtQuantite = new JTextField();
+        txtQuantite = new JTextField(25);
         inputPanel.add(txtQuantite);
         add(inputPanel, BorderLayout.EAST);
 
@@ -138,8 +142,6 @@ public class LivrePanel extends JPanel {
         }
     }
 
-
-
     private void supprimerLivre() {
         int selectedRow = tableLivres.getSelectedRow();
         if (selectedRow == -1) {
@@ -165,7 +167,6 @@ public class LivrePanel extends JPanel {
     public void loadLivres() {
         tableModel.setRowCount(0); // Clear the table
         List<Livre> livres = livreController.listerLivres(); // Fetch updated book list
-        System.out.println("Loading Livres: " + livres); // Debugging log
         for (Livre livre : livres) {
             tableModel.addRow(new Object[]{
                     livre.getId(),
@@ -177,9 +178,6 @@ public class LivrePanel extends JPanel {
             });
         }
     }
-
-
-
 
     private void clearInputFields() {
         txtISBN.setText("");
