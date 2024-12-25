@@ -6,6 +6,7 @@ import util.DocumentListenerAdapter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.List;
 
@@ -22,25 +23,60 @@ public class UtilisateurPanel extends JPanel {
         // Search bar
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         txtSearch = new JTextField(20);
-        txtSearch.getDocument().addDocumentListener(new DocumentListenerAdapter(() -> rechercherUtilisateur()));
+        txtSearch.getDocument().addDocumentListener(new DocumentListenerAdapter(this::rechercherUtilisateur));
         searchPanel.add(new JLabel("Rechercher (Nom ou Email):"));
         searchPanel.add(txtSearch);
         add(searchPanel, BorderLayout.NORTH);
 
-        // Table
+        // Table Panel
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setPreferredSize(new Dimension(600, 300));
         tableModel = new DefaultTableModel(new String[]{"ID", "Nom", "Email"}, 0);
         tableUtilisateurs = new JTable(tableModel);
-        add(new JScrollPane(tableUtilisateurs), BorderLayout.CENTER);
 
-        // Input fields
-        JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
-        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        inputPanel.add(new JLabel("Nom:"));
-        txtNom = new JTextField();
-        inputPanel.add(txtNom);
-        inputPanel.add(new JLabel("Email:"));
-        txtEmail = new JTextField();
-        inputPanel.add(txtEmail);
+        // Enable sorting by setting a RowSorter
+        TableRowSorter<DefaultTableModel> rowSorter = new TableRowSorter<>(tableModel);
+        tableUtilisateurs.setRowSorter(rowSorter);
+
+        tableUtilisateurs.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tableUtilisateurs.getSelectedRow() != -1) {
+                int selectedRow = tableUtilisateurs.getSelectedRow();
+                txtNom.setText(tableModel.getValueAt(selectedRow, 1).toString());
+                txtEmail.setText(tableModel.getValueAt(selectedRow, 2).toString());
+            }
+        });
+
+        tablePanel.add(new JScrollPane(tableUtilisateurs), BorderLayout.CENTER);
+        add(tablePanel, BorderLayout.CENTER);
+
+        // Input fields at the top of the panel
+        JPanel inputPanel = new JPanel(new BorderLayout());
+        inputPanel.setBorder(BorderFactory.createTitledBorder("Détails de l'utilisateur"));
+        inputPanel.setPreferredSize(new Dimension(300, 150)); // Adjust size
+
+        JPanel fieldsPanel = new JPanel(new GridBagLayout()); // Inner panel for alignment
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.NORTH; // Align at the top
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        fieldsPanel.add(new JLabel("Nom:"), gbc);
+
+        gbc.gridx = 1;
+        txtNom = new JTextField(15); // Adjust field size
+        fieldsPanel.add(txtNom, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        fieldsPanel.add(new JLabel("Email:"), gbc);
+
+        gbc.gridx = 1;
+        txtEmail = new JTextField(15); // Adjust field size
+        fieldsPanel.add(txtEmail, gbc);
+
+        inputPanel.add(fieldsPanel, BorderLayout.NORTH); // Align the fields to the top
         add(inputPanel, BorderLayout.EAST);
 
         // Buttons
@@ -93,7 +129,6 @@ public class UtilisateurPanel extends JPanel {
         clearInputFields();
     }
 
-
     private void supprimerUtilisateur() {
         int selectedRow = tableUtilisateurs.getSelectedRow();
         if (selectedRow == -1) {
@@ -129,7 +164,6 @@ public class UtilisateurPanel extends JPanel {
             });
         }
     }
-
 
     private void clearInputFields() {
         txtNom.setText("");
