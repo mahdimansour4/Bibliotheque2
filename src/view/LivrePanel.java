@@ -118,46 +118,26 @@ public class LivrePanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Veuillez sélectionner un livre à modifier.", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        try {
+            Livre livre = new Livre(
+                    Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString()), // ID
+                    txtISBN.getText(),
+                    txtTitre.getText(),
+                    txtAuteur.getText(),
+                    0,
+                    txtGenre.getText(),
+                    Integer.parseInt(txtQuantite.getText())
+            );
 
-        // Pre-fill fields with selected book data
-        txtISBN.setText(tableModel.getValueAt(selectedRow, 1).toString());
-        txtTitre.setText(tableModel.getValueAt(selectedRow, 2).toString());
-        txtAuteur.setText(tableModel.getValueAt(selectedRow, 3).toString());
-        txtGenre.setText(tableModel.getValueAt(selectedRow, 4).toString());
-        txtQuantite.setText(tableModel.getValueAt(selectedRow, 5).toString());
-
-        // Confirm modification
-        int result = JOptionPane.showConfirmDialog(
-                this,
-                "Souhaitez-vous enregistrer les modifications ?",
-                "Modifier Livre",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
-
-        if (result == JOptionPane.YES_OPTION) {
-            try {
-                Livre livre = new Livre(
-                        Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString()), // ID
-                        txtISBN.getText(),
-                        txtTitre.getText(),
-                        txtAuteur.getText(),
-                        0,
-                        txtGenre.getText(),
-                        Integer.parseInt(txtQuantite.getText())
-                );
-
-                livreController.modifierLivre(livre);
-                JOptionPane.showMessageDialog(this, "Livre modifié avec succès.");
-                loadLivres();
-                clearInputFields();
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Veuillez entrer une quantité valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            clearInputFields(); // Reset fields if the user cancels
+            livreController.modifierLivre(livre); // Update the book
+            JOptionPane.showMessageDialog(this, "Livre modifié avec succès.");
+            loadLivres(); // Refresh the table
+            clearInputFields();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Veuillez entrer une quantité valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
 
     private void supprimerLivre() {
@@ -184,7 +164,8 @@ public class LivrePanel extends JPanel {
 
     public void loadLivres() {
         tableModel.setRowCount(0); // Clear the table
-        List<Livre> livres = livreController.listerLivres(); // Fetch all books from the controller
+        List<Livre> livres = livreController.listerLivres(); // Fetch updated book list
+        System.out.println("Loading Livres: " + livres); // Debugging log
         for (Livre livre : livres) {
             tableModel.addRow(new Object[]{
                     livre.getId(),
@@ -192,10 +173,12 @@ public class LivrePanel extends JPanel {
                     livre.getTitre(),
                     livre.getAuteur(),
                     livre.getGenre(),
-                    livre.getQuantite() // Ensure this reflects the updated quantity
+                    livre.getQuantite()
             });
         }
     }
+
+
 
 
     private void clearInputFields() {
