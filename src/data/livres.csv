@@ -1,0 +1,11 @@
+id,isbn,titre,auteur,anneePublication,genre,quantite
+1,9781234567890,Java Programming,James Gosling,2005,Programming,6
+2,9789876543210,Effective Java,Joshua Bloch,2008,Programming,4
+3,9781111111111,Head First Java,Kathy Sierra,2010,Programming,4
+4,9782222222222,Python Crash Course,Eric Matthes,2016,Programming,9
+5,9783333333333,The Pragmatic Programmer,Andrew Hunt,1999,Programming,4
+6,9784444444444,Clean Code,Robert C. Martin,2008,Programming,3
+7,9785555555555,Design Patterns,Erich Gamma,1994,Programming,5
+8,9786666666666,Introduction to Algorithms,Thomas H. Cormen,2009,Computer Science,5
+9,9787777777777,Artificial Intelligence,Stuart Russell,2020,Computer Science,4
+10,9788888888888,Deep Learning,Ian Goodfellow,2016,Machine Learning,3
