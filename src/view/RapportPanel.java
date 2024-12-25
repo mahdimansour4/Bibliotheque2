@@ -24,6 +24,7 @@ public class RapportPanel extends JPanel {
     private UtilisateurController utilisateurController;
 
     private JLabel lblTotalLivres, lblTotalUtilisateurs, lblTotalEmprunts;
+    private JPanel chartPanel; // Make chartPanel a field for dynamic updates
 
     public RapportPanel() {
         this.livreController = new LivreController();
@@ -44,17 +45,8 @@ public class RapportPanel extends JPanel {
         add(statsPanel, BorderLayout.NORTH);
 
         // Center Panel for Charts
-        JPanel chartPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        chartPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         chartPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // Create Charts
-        JFreeChart mostBorrowedBooksChart = createMostBorrowedBooksChart();
-        JFreeChart mostActiveUsersChart = createMostActiveUsersChart();
-
-        // Add Charts to the Panel
-        chartPanel.add(new ChartPanel(mostBorrowedBooksChart));
-        chartPanel.add(new ChartPanel(mostActiveUsersChart));
-
         add(chartPanel, BorderLayout.CENTER);
 
         // Load Data
@@ -68,13 +60,14 @@ public class RapportPanel extends JPanel {
         lblTotalEmprunts.setText("Total Emprunts: " + empruntController.listerEmprunts().size());
 
         // Refresh Charts
+        chartPanel.removeAll(); // Clear the chart panel
         JFreeChart mostBorrowedBooksChart = createMostBorrowedBooksChart();
         JFreeChart mostActiveUsersChart = createMostActiveUsersChart();
-
-        ((ChartPanel) ((JPanel) getComponent(1)).getComponent(0)).setChart(mostBorrowedBooksChart);
-        ((ChartPanel) ((JPanel) getComponent(1)).getComponent(1)).setChart(mostActiveUsersChart);
+        chartPanel.add(new ChartPanel(mostBorrowedBooksChart));
+        chartPanel.add(new ChartPanel(mostActiveUsersChart));
+        chartPanel.revalidate(); // Refresh the panel to reflect changes
+        chartPanel.repaint();
     }
-
 
     private JFreeChart createMostBorrowedBooksChart() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -126,7 +119,7 @@ public class RapportPanel extends JPanel {
         // Populate Dataset
         userBorrowCounts.entrySet().stream()
                 .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
-                .limit(5) // Limit to Top 5
+                .limit(10)
                 .forEach(entry -> dataset.setValue(entry.getKey(), entry.getValue()));
 
         // Create Pie Chart
