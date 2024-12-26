@@ -46,15 +46,6 @@ public class UtilisateurPanel extends JPanel {
         TableRowSorter<DefaultTableModel> rowSorter = new TableRowSorter<>(tableModel);
         tableUtilisateurs.setRowSorter(rowSorter);
 
-        // Pré-remplir les champs lors de la sélection d'une ligne
-        tableUtilisateurs.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && tableUtilisateurs.getSelectedRow() != -1) {
-                int selectedRow = tableUtilisateurs.getSelectedRow();
-                txtNom.setText(tableModel.getValueAt(selectedRow, 1).toString());
-                txtEmail.setText(tableModel.getValueAt(selectedRow, 2).toString());
-            }
-        });
-
         tablePanel.add(new JScrollPane(tableUtilisateurs), BorderLayout.CENTER);
         add(tablePanel, BorderLayout.CENTER);
 
